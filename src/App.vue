@@ -1,47 +1,68 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+import { ref } from "vue";
+const newTodo = ref("");
+const todos = ref([
+    {
+        title: "Acheter la propriété 'Rue de la Paix'",
+        completed: false,
+        date: 1,
+    },
+    {
+        title: "Construire un hôtel sur 'Avenue Foch'",
+        completed: false,
+        date: 2,
+    },
+    { title: "Éviter la case prison", completed: false, date: 3 },
+]);
+
+const addTodo = () => {
+    todos.value.push({
+        title: newTodo.value,
+        completed: false,
+        date: Date.now(),
+    });
+    newTodo.value = "";
+};
+
+const sortedTodos = () => {
+    return todos.value.toSorted((a, b) => (a.completed > b.completed ? 1 : -1));
+};
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+    <h1>todo liste</h1>
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
+    <form action="" @submit.prevent="addTodo">
+        <label for="task">Ajouter une tâche</label>
+        <input type="text" placeholder="Ajouter une tâche" v-model="newTodo" />
+        <button :disabled="newTodo.length === 0">Ajouter</button>
+    </form>
+    <h2>Liste des tâches</h2>
+    <div v-if="todos.length === 0">
+        <p>Aucune tâche pour l'instant</p>
     </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main>
+    <div v-else>
+        <ul>
+            <li
+                :class="{ completed: todo.completed }"
+                :key="todo.date"
+                v-for="todo in sortedTodos()"
+            >
+                <label for=""
+                    ><input
+                        type="checkbox"
+                        :style="todo.completed"
+                        v-model="todo.completed"
+                    />{{ todo.title }}</label
+                >
+            </li>
+        </ul>
+    </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
+.completed {
+    opacity: 0.5;
+    text-decoration: line-through;
 }
 </style>
