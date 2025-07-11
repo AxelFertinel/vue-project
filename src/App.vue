@@ -25,17 +25,33 @@ const addTodo = () => {
 };
 
 const sortedTodos = () => {
-    return todos.value.toSorted((a, b) => (a.completed > b.completed ? 1 : -1));
+    const sortedTodos = todos.value.toSorted((a, b) =>
+        a.completed > b.completed ? 1 : -1
+    );
+
+    if (hideCompleted.value === true) {
+        return sortedTodos.filter((t) => t.completed === false);
+    }
+
+    return sortedTodos;
 };
+
+const hideCompleted = ref(false);
 </script>
 
 <template>
     <h1>todo liste</h1>
 
     <form action="" @submit.prevent="addTodo">
-        <label for="task">Ajouter une tâche</label>
-        <input type="text" placeholder="Ajouter une tâche" v-model="newTodo" />
-        <button :disabled="newTodo.length === 0">Ajouter</button>
+        <fieldset role="group">
+            <input
+                type="text"
+                placeholder="Ajouter une tâche"
+                v-model="newTodo"
+                aria-label="Ajouter une tâche"
+            />
+            <button :disabled="newTodo.length === 0">Ajouter</button>
+        </fieldset>
     </form>
     <h2>Liste des tâches</h2>
     <div v-if="todos.length === 0">
@@ -57,6 +73,10 @@ const sortedTodos = () => {
                 >
             </li>
         </ul>
+        <label>
+            <input type="checkbox" v-model="hideCompleted" />Masquer les tâches
+            complétées
+        </label>
     </div>
 </template>
 
