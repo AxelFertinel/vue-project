@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { computed, ref } from "vue";
 const newTodo = ref("");
 const todos = ref([
     {
@@ -24,7 +24,7 @@ const addTodo = () => {
     newTodo.value = "";
 };
 
-const sortedTodos = () => {
+const sortedTodos = computed(() => {
     const sortedTodos = todos.value.toSorted((a, b) =>
         a.completed > b.completed ? 1 : -1
     );
@@ -34,9 +34,12 @@ const sortedTodos = () => {
     }
 
     return sortedTodos;
-};
+});
 
 const hideCompleted = ref(false);
+const remainingTodo = computed(() => {
+    return todos.value.filter((t) => t.completed === false).length;
+});
 </script>
 
 <template>
@@ -54,6 +57,10 @@ const hideCompleted = ref(false);
         </fieldset>
     </form>
     <h2>Liste des tâches</h2>
+    <p v-if="remainingTodo > 0">
+        Il reste {{ remainingTodo }} tâche{{ remainingTodo <= 1 ? "" : "s" }} à
+        réaliser
+    </p>
     <div v-if="todos.length === 0">
         <p>Aucune tâche pour l'instant</p>
     </div>
@@ -62,7 +69,7 @@ const hideCompleted = ref(false);
             <li
                 :class="{ completed: todo.completed }"
                 :key="todo.date"
-                v-for="todo in sortedTodos()"
+                v-for="todo in sortedTodos"
             >
                 <label for=""
                     ><input
