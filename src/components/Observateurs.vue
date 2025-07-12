@@ -1,0 +1,22 @@
+<template>
+    Temps écoulé : {{ time }} <button @click="reset">reset</button>
+    <input type="text" v-model="page.title" />
+</template>
+<script setup>
+import { useTimer } from "@/composable/useTimer";
+import { ref, watch, watchEffect } from "vue";
+
+const { time, reset } = useTimer();
+const page = ref({
+    title: "",
+});
+// watch(
+//     () => page.value.title,
+//     (newValue, oldValue) => {
+//         document.title = newValue;
+//     }
+// );
+watchEffect(() => {
+    document.title = page.value.title;
+});
+</script>

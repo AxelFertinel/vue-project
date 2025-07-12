@@ -6,25 +6,27 @@
 </template>
 
 <script setup>
+import { useTimer } from "@/composable/useTimer";
 import { ref, onMounted, onUnmounted } from "vue";
-const time = ref(0);
+const { time } = useTimer();
 const div = ref(null);
 const size = ref({
     width: 0,
     height: 0,
 });
-let timer;
+
+//let timer;
 onMounted(() => {
     const rect = div.value.getBoundingClientRect();
     size.value = {
         width: rect.width,
         height: rect.height,
     };
-    timer = setInterval(() => {
-        time.value++;
-    }, 1000);
+    // timer = setInterval(() => {
+    //     time.value++;
+    // }, 1000);
 });
-onUnmounted(() => {
-    clearInterval(timer);
-});
+// onUnmounted(() => {
+//     clearInterval(timer);
+// });
 </script>

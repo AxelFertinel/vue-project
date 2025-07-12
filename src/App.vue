@@ -1,17 +1,26 @@
+h2
 <template>
-    <h1>todo liste</h1>
+    <h2>Observateurs</h2>
+    <Observateurs></Observateurs>
+    <hr />
+
+    <h2>onMounted/onUnmounted</h2>
     <button @click="showTimer = !showTimer">Afficher / Masquer</button>
     <p>
         <strong><Timer v-if="showTimer" /></strong>
     </p>
+    <hr />
 
+    <h2>Layout</h2>
     <Layout>
         <template #header>Entete</template>
         <template #aside>Aside</template>
         <template #main>Main</template>
         <template #footer>Footer</template>
     </Layout>
+    <hr />
 
+    <h2>todo liste</h2>
     <form action="" @submit.prevent="addTodo">
         <fieldset role="group">
             <input
@@ -24,6 +33,10 @@
         </fieldset>
     </form>
     <h2>Liste des tâches</h2>
+    <label>
+        <input type="checkbox" v-model="hideCompleted" />Masquer les tâches
+        complétées
+    </label>
     <p v-if="remainingTodo > 0">
         Il reste {{ remainingTodo }} tâche{{ remainingTodo <= 1 ? "" : "s" }} à
         réaliser
@@ -47,11 +60,6 @@
                 />
             </li>
         </ul>
-        <label>
-            <input type="checkbox" v-model="hideCompleted" />Masquer les tâches
-            complétées
-        </label>
-        <Checkbox label="bonjour" />
     </div>
 </template>
 <script setup>
@@ -59,6 +67,7 @@ import { computed, ref, onMounted } from "vue";
 import Checkbox from "./components/Checkbox.vue";
 import Timer from "./components/Timer.vue";
 import Layout from "./components/Layout.vue";
+import Observateurs from "./components/Observateurs.vue";
 
 const showTimer = ref("true");
 const newTodo = ref("");
