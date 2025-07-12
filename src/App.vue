@@ -1,5 +1,10 @@
 <template>
     <h1>todo liste</h1>
+    <button @click="showTimer = !showTimer">Afficher / Masquer</button>
+    <p>
+        <strong><Timer v-if="showTimer" /></strong>
+    </p>
+
     <Layout>
         <template #header>Entete</template>
         <template #aside>Aside</template>
@@ -50,24 +55,21 @@
     </div>
 </template>
 <script setup>
-import { computed, ref } from "vue";
+import { computed, ref, onMounted } from "vue";
 import Checkbox from "./components/Checkbox.vue";
+import Timer from "./components/Timer.vue";
 import Layout from "./components/Layout.vue";
 
+const showTimer = ref("true");
 const newTodo = ref("");
-const todos = ref([
-    {
-        title: "Acheter la propriété 'Rue de la Paix'",
-        completed: false,
-        date: 1,
-    },
-    {
-        title: "Construire un hôtel sur 'Avenue Foch'",
-        completed: false,
-        date: 2,
-    },
-    { title: "Éviter la case prison", completed: false, date: 3 },
-]);
+const todos = ref([]);
+onMounted(() => {
+    fetch("https://jsonplaceholder.typicode.com/todos")
+        .then((r) => r.json())
+        .then(
+            (v) => (todos.value = v.map((todo) => ({ ...todo, date: todo.id })))
+        );
+});
 
 const addTodo = () => {
     todos.value.push({
