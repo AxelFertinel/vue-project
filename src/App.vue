@@ -1,5 +1,59 @@
+<template>
+    <h1>todo liste</h1>
+    <Layout>
+        <template #header>Entete</template>
+        <template #aside>Aside</template>
+        <template #main>Main</template>
+        <template #footer>Footer</template>
+    </Layout>
+
+    <form action="" @submit.prevent="addTodo">
+        <fieldset role="group">
+            <input
+                type="text"
+                placeholder="Ajouter une tâche"
+                v-model="newTodo"
+                aria-label="Ajouter une tâche"
+            />
+            <button :disabled="newTodo.length === 0">Ajouter</button>
+        </fieldset>
+    </form>
+    <h2>Liste des tâches</h2>
+    <p v-if="remainingTodo > 0">
+        Il reste {{ remainingTodo }} tâche{{ remainingTodo <= 1 ? "" : "s" }} à
+        réaliser
+    </p>
+    <div v-if="todos.length === 0">
+        <p>Aucune tâche pour l'instant</p>
+    </div>
+    <div v-else>
+        <ul>
+            <li
+                :class="{ completed: todo.completed }"
+                :key="todo.date"
+                v-for="todo in sortedTodos"
+            >
+                <Checkbox
+                    :label="todo.title"
+                    :style="todo.completed"
+                    @check="console.log('coché')"
+                    @uncheck="console.log('decoché')"
+                    v-model="todo.completed"
+                />
+            </li>
+        </ul>
+        <label>
+            <input type="checkbox" v-model="hideCompleted" />Masquer les tâches
+            complétées
+        </label>
+        <Checkbox label="bonjour" />
+    </div>
+</template>
 <script setup>
 import { computed, ref } from "vue";
+import Checkbox from "./components/Checkbox.vue";
+import Layout from "./components/Layout.vue";
+
 const newTodo = ref("");
 const todos = ref([
     {
@@ -41,52 +95,6 @@ const remainingTodo = computed(() => {
     return todos.value.filter((t) => t.completed === false).length;
 });
 </script>
-
-<template>
-    <h1>todo liste</h1>
-
-    <form action="" @submit.prevent="addTodo">
-        <fieldset role="group">
-            <input
-                type="text"
-                placeholder="Ajouter une tâche"
-                v-model="newTodo"
-                aria-label="Ajouter une tâche"
-            />
-            <button :disabled="newTodo.length === 0">Ajouter</button>
-        </fieldset>
-    </form>
-    <h2>Liste des tâches</h2>
-    <p v-if="remainingTodo > 0">
-        Il reste {{ remainingTodo }} tâche{{ remainingTodo <= 1 ? "" : "s" }} à
-        réaliser
-    </p>
-    <div v-if="todos.length === 0">
-        <p>Aucune tâche pour l'instant</p>
-    </div>
-    <div v-else>
-        <ul>
-            <li
-                :class="{ completed: todo.completed }"
-                :key="todo.date"
-                v-for="todo in sortedTodos"
-            >
-                <label for=""
-                    ><input
-                        type="checkbox"
-                        :style="todo.completed"
-                        v-model="todo.completed"
-                    />{{ todo.title }}</label
-                >
-            </li>
-        </ul>
-        <label>
-            <input type="checkbox" v-model="hideCompleted" />Masquer les tâches
-            complétées
-        </label>
-    </div>
-</template>
-
 <style scoped>
 .completed {
     opacity: 0.5;
