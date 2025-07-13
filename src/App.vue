@@ -1,5 +1,7 @@
 h2
 <template>
+    <Quiz></Quiz>
+    <hr />
     <h2>Observateurs</h2>
     <Observateurs></Observateurs>
     <hr />
@@ -68,6 +70,7 @@ import Checkbox from "./components/Checkbox.vue";
 import Timer from "./components/Timer.vue";
 import Layout from "./components/Layout.vue";
 import Observateurs from "./components/Observateurs.vue";
+import Quiz from "./components/Quiz.vue";
 
 const showTimer = ref("true");
 const newTodo = ref("");
